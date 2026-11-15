@@ -153,8 +153,10 @@ document.querySelector('#logout-button').addEventListener('click', async () => {
 const restoreSession = async () => {
   setAuthStatus('Проверяем сессию…');
   try {
-    if (!api.accessToken) await api.refresh();
-    const payload = JSON.parse(atob(api.accessToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    await api.refresh();
+    const encoded = api.accessToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const padded = encoded.padEnd(Math.ceil(encoded.length / 4) * 4, '=');
+    const payload = JSON.parse(atob(padded));
     openChat({ username: payload.username ?? 'участник' });
   } catch {
     api.accessToken = null;
