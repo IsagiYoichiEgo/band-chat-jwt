@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Групповой WebSocket-чат с JWT-авторизацией">
+  <title>BACKSTAGE — чат группы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;500;600;700;800&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <a class="logo" href="#" aria-label="BACKSTAGE — на главную"><span class="logo-signal">///</span> BACKSTAGE</a>
+      <div id="socket-badge" class="socket-badge"><span></span><b>Не подключено</b></div>
+    </header>
+
+    <main>
+      <section id="auth-view" class="auth-layout">
+        <div class="auth-copy">
+          <p class="kicker">Закрытый канал группы</p>
+          <h1>Один чат.<br>Один ритм.</h1>
+          <p>Обсуждайте репетиции, трек-лист и выступления в общем канале. Писать могут только участники с активной JWT-сессией.</p>
+          <div class="signal-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="auth-card">
+          <div class="auth-card-top">
+            <span>CHANNEL 01</span><span>AUTH</span>
+          </div>
+          <h2>Подключиться</h2>
+          <div class="tabs" role="tablist" aria-label="Способ входа">
+            <button id="login-tab" class="tab is-active" type="button" role="tab" aria-selected="true">Вход</button>
+            <button id="register-tab" class="tab" type="button" role="tab" aria-selected="false">Регистрация</button>
+          </div>
+          <form id="login-form" class="auth-form">
+            <label>Логин<input name="username" autocomplete="username" required placeholder="Ваш username"></label>
+            <label>Пароль<input name="password" type="password" autocomplete="current-password" minlength="6" required placeholder="••••••••"></label>
+            <button class="action-button" type="submit">Войти в канал</button>
+          </form>
+          <form id="register-form" class="auth-form" hidden>
+            <label>Логин<input name="username" autocomplete="username" maxlength="150" pattern="[\w.@+\-]+" required placeholder="Придумайте username"></label>
+            <label>Пароль<input name="password" type="password" autocomplete="new-password" minlength="6" required placeholder="Минимум 6 символов"></label>
+            <button class="action-button" type="submit">Создать аккаунт</button>
+          </form>
+          <p id="auth-status" class="status" role="status"></p>
+        </div>
+      </section>
+
+      <section id="chat-view" class="chat-layout" hidden>
+        <aside class="channel-panel">
+          <div>
+            <p class="kicker">Общий канал</p>
+            <h2># репетиционная</h2>
+            <p class="channel-description">Здесь вся группа. Сообщения появляются в реальном времени.</p>
+          </div>
+          <div class="current-user">
+            <span class="avatar" id="avatar">U</span>
+            <div><small>Вы вошли как</small><strong id="current-username">user</strong></div>
+          </div>
+          <button id="logout-button" class="logout-button" type="button">Выйти из чата</button>
+        </aside>
+
+        <div class="chat-panel">
+          <div class="chat-heading">
+            <div><span>LIVE</span><strong>Сообщения группы</strong></div>
+            <p id="chat-status">Авторизация WebSocket…</p>
+          </div>
+          <ol id="message-list" class="message-list" aria-live="polite" aria-label="Сообщения чата">
+            <li id="empty-message" class="empty-message"><span>♪</span><strong>Канал пока тихий</strong><p>Первое сообщение задаст ритм разговору.</p></li>
+          </ol>
+          <form id="message-form" class="composer">
+            <label class="sr-only" for="message-input">Сообщение</label>
+            <input id="message-input" name="message" maxlength="1000" autocomplete="off" placeholder="Напишите сообщение…" disabled>
+            <button type="submit" disabled aria-label="Отправить сообщение">Отправить</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <footer><span>JWT protected</span><span>WebSocket live channel</span><span>INAI · 2026</span></footer>
+  </div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
