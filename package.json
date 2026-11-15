@@ -1,0 +1,8 @@
+{
+  "name": "band-chat-jwt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
